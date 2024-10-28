@@ -1,14 +1,10 @@
-name: flask
+name: wordle
 channels:
   - conda-forge
   - defaults
 dependencies:
   - pip
-  - apscheduler
-  - cython
   - flask
-  - python
-  - python-dotenv
+  - python>=1.13
   - regex
-  - setuptools
   - waitress

@@ -1,23 +1,19 @@
-# Flask Template
+# Flask Wordle
 
-A Flask framework template.
+To be update.
 
-Utilizing python, and flask, running on waitress for backend;
-typescript, tailwindcss, metroui, htmx and sass bundled by webpack for frontend.
+## TL;DR
 
-## Using this template
-
-[Creating a repository from a template](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template#creating-a-repository-from-a-template)
-
-## Git clone repository with gh cli
+Make sure you have conda/mamba and node/nvm installed, and run:
 
 ```bash
-gh repo clone user/your-project -- --recursive -j8 --branch main
+bash node.sh
+mamba env create
+mamba activate wordle
+python webapp.py
 ```
 
-### List of submodule
-
-///
+The application should be running at port 5000.
 
 ## List of dependencies
 
@@ -25,30 +21,22 @@ gh repo clone user/your-project -- --recursive -j8 --branch main
 
 [package.json]: package.json
 [environment.yml]: environment.yml
-[setting.py]: webapp/config/setting.py
 
 ### Python dependencies
 
 |Package            |Version        |Channel        |Settings         |Remarks                |
 |:------------------|:--------------|:--------------|:----------------|:---------------------:|
-|python             |>=3.11.0       |conda-forge    |[environment.yml]|                       |
+|python             |>=3.12.0       |conda-forge    |[environment.yml]|                       |
 |flask              |>=3.0          |conda-forge    |[environment.yml]|                       |
 |waitress           |>=3.0          |conda-forge    |[environment.yml]|                       |
-|apscheduler        |>=3.10.0       |conda-forge    |[environment.yml]|                       |
-|cython             |>=3.0.10       |conda-forge    |[environment.yml]|                       |
-|python-dotenv      |>=1.0.0        |conda-forge    |[environment.yml]|                       |
-|regex              |>=2023.12.25   |conda-forge    |[environment.yml]|                       |
 
 ### Javascript dependencies
 
 |Package            |Version        |Channel        |Settings         |Remarks                |
 |:------------------|:--------------|:--------------|:----------------|:---------------------:|
 |typescript         |>=5.5          |npm            |[package.json]   |                       |
-|tailwindcss        |>=3.4          |npm            |[package.json]   |                       |
 |sass               |>=1.77         |npm            |[package.json]   |                       |
 |webpack            |>=5.93         |npm            |[package.json]   |                       |
-|metroui            |==5.0.6        |cdn            |[setting.py]     |                       |
-|htmx               |>=2.0.0        |cdn            |[setting.py]     |                       |
 
 </details>
 
@@ -62,7 +50,7 @@ gh repo clone user/your-project -- --recursive -j8 --branch main
 ```bash
 mamba env create                            # For production
 mamba env create -f environment.dev.yml     # For development
-mamba activate flask
+mamba activate wordle
 ```
 
 ### B. With CLI
@@ -70,11 +58,11 @@ mamba activate flask
 <details> <!-- markdownlint-disable-line MD033 -->
 
 ```bash
-mamba create -n flask
-mamba activate flask
+mamba create -n wordle
+mamba activate wordle
 
-mamba install -c conda-forge flask cython waitress python-dotenv -y
-mamba install -c conda-forge apscheduler regex -y
+mamba install -c conda-forge flask cython waitress -y
+mamba install -c conda-forge regex -y
 
 # Dev dependencies
 mamba install -c conda-forge ipykernel djlint ruff -y
@@ -86,45 +74,39 @@ mamba install -c conda-forge ipykernel djlint ruff -y
 
 - Install [nvm](docs/node.md) if needed
 
-### Automatically Compile TypeScript and Sass on change
+### Automatically config and generate js and css
 
 ```bash
+bash node.sh
+```
+
+### Manually config nvm and node
+
+```bash
+nvm install
 nvm use
+
 npm install
 ```
 
-## CLI cheat sheet
-
-### For Development
+## Webpack
 
 ```bash
-npm webpack                 # In production mode or
-npm webpack:watch           # In debug mode
+npm run webpack                 # In production mode or
+npm run webpack:watch           # In debug mode
+```
 
+## Ruff
+
+```bash
+ruff check .                # Check mode
+ruff check . --watch        # Watch mode
+```
+
+## Run the app
+
+```bash
 python webapp.py            # In production mode or
 python webapp.py --flask    # In flask mode or
 python webapp.py --debug    # In debug mode
-```
-
-### For Deployment
-
-```bash
-python compile.py           # Compile codes only or
-python deploy.py            # Compile and deploy code
-
-unzip deploy.zip -d deploy  # Unzip the zip anywhere you want
-cd deploy                   # Change directory into the unzip directory
-python webapp.py            # "mamba env create" on remote if needed
-```
-
-## Create dotenv files for Secret and Tokens (if needed)
-
-```dosini
-# .env for production
-# .env.dev for development 
-
-# Flask app Secret Key
-SECRET_KEY=...
-# Other Tokens (if any)
-TOKEN=...
 ```

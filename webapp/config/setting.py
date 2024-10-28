@@ -12,9 +12,6 @@ class _BaseSetting:
     DEBUG: ClassVar[bool] = False
     DEVELOPMENT: ClassVar[bool] = False
 
-    # Environment variables
-    DOTENV: str = ".env"
-
     # Logging level
     # SOME_LOG: Log = "WARNING"
 
@@ -43,9 +40,6 @@ class ProdSetting(_BaseSetting):
 class DevSetting(_BaseSetting):
     DEBUG: ClassVar[bool] = True
     DEVELOPMENT: ClassVar[bool] = True
-
-    # Environment variables
-    DOTENV: str = ".env.dev"
 
 
 def loading(debug: bool) -> DevSetting | ProdSetting:
