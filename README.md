@@ -1,6 +1,6 @@
 # Flask Wordle
 
-To be update.
+A wordle game with absurdle mode powered by flask.
 
 ## TL;DR
 
@@ -10,7 +10,8 @@ Make sure you have conda/mamba and node/nvm installed, and run:
 bash node.sh
 mamba env create
 mamba activate wordle
-python webapp.py
+python webapp.py --path ./path/to/file.txt              # In production mode or 
+python webapp.py --flask --path ./words/default.txt     # In flask mode
 ```
 
 The application should be running at port 5000.
@@ -21,6 +22,7 @@ The application should be running at port 5000.
 
 [package.json]: package.json
 [environment.yml]: environment.yml
+[handler.log]: handler.log
 
 ### Python dependencies
 
@@ -106,7 +108,27 @@ ruff check . --watch        # Watch mode
 ## Run the app
 
 ```bash
-python webapp.py            # In production mode or
-python webapp.py --flask    # In flask mode or
-python webapp.py --debug    # In debug mode
+python webapp.py --path ./path/to/file.txt           # In production mode or
+python webapp.py --flask --path ./path/to/file.txt   # In flask mode or
+python webapp.py --debug --path ./path/to/file.txt   # In debug mode
 ```
+
+```text
+    -h, --help                      Show this help message and exit
+    -f, --flask                     Run under flask (default: False)
+    -d, --debug                     Debug under flask (default: False)
+    -t, --test                      Create app only (default: False)
+    -s, --host HOST                 Server host (default: None)
+    -p, --port PORT                 Server port (default: None)
+    --path PATH                     Wordle word list path (Required: True)
+    --rounds ROUNDS                 max number of rounds (default: 6)
+```
+
+### Log files
+
+The log file is located at [handler.log]
+
+### Remarks
+
+- Normally the answers are logged for debug propose (Under flask/debug mode)
+- It is recommended to set a larger number for absurdle mode (host cheat)

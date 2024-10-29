@@ -36,7 +36,7 @@ def get_args() -> Args:
     parser.add_argument(*port, dest="port", type=int, help="server port")
 
     parser.add_argument("--path", dest="path", type=str, required=True, help="wordle word list path")
-    parser.add_argument("--rounds", dest="rounds", type=int, required=True, help="max number of rounds")
+    parser.add_argument("--rounds", dest="rounds", type=int, default=6, help="max number of rounds")
 
     return parser.parse_args(namespace=Args())
 
