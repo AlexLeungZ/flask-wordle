@@ -1,0 +1,8 @@
+hello
+world
+quite
+fancy
+fresh
+panic
+crazy
+buggy
