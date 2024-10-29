@@ -23,7 +23,7 @@ class _BaseSetting:
 
     # Jinja Variables
     JINJA_SITE: str = "AlexLeungZ"
-    JINJA_HTMX: str = "2.0.2"
+    JINJA_HTMX: str = "2.0.3"
     JINJA_MUI: str = "5.0.6"
 
 

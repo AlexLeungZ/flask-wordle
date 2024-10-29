@@ -1,0 +1,66 @@
+{% import "_template.html" as temp %}
+
+{# tailwind class pre-load for python function res2color #}
+{# class="bg-green-500" class="bg-yellow-400" class="bg-gray-600" class="bg-white" #}
+
+{# Template for wordle character  display #}
+{% macro card(char, result) %}
+    {% set shape = "w-20 h-20 grid place-content-center" %}
+    {% set border = "rounded-sm border-solid border-1 border-neutral-500 shadowed" %}
+    <a class="{{ shape }} gap-4 {{ result | res2color }} {{ border }}">
+        <span class="caption text-center text-4xl font-black text-white">
+            {{ char | capitalize  if char.isalpha() else "" }}
+            {#  #}
+        </span>
+    </a>
+{% endmacro %}
+
+{# Template for wordle input field #}
+{% macro field(name, value) %}
+    {% set focus = "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" %}
+    {% set border = "border-2 border-gray-300 rounded-xl" %}
+    {% set isAlpha = "return /[a-z]/i.test(event.key)" %}
+    <input class="w-16 px-2 py-2 text-2xl text-center text-black {{ focus }} {{ border }}"
+           type="text"
+           maxlength="1"
+           onkeydown="{{ isAlpha }}"
+           name="{{ name }}"
+           value="{{ value }}" />
+{% endmacro %}
+
+{# Post request via HTMX #}
+<form id="query" method="post" class="w-full">
+    {% set attempt = attempt or 0 %}
+    <input type="hidden" name="attempt" value="{{ attempt }}" />
+    <div class="container-fluid pb-2">
+        {% for gss, res in guess | zip(result) %}
+            <div class="grid grid-flow-col auto-cols-fr gap-2 mb-2">
+                {% for char, val in gss | zip(res) %}
+                    {{ card(char, val) }}
+                    {#  #}
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+    <div class="container-fluid content-center pb-2">
+        <div class="grid grid-flow-col auto-cols-fr gap-2 mb-2">
+            {% for n in range(5) %}
+                {{ field("key" ~ n) }}
+                {#  #}
+            {% endfor %}
+        </div>
+    </div>
+</form>
+
+{# Result popup dialog #}
+{% if message %}
+    {% if message[0] == "win" %}
+        {% set dialog = "border-lime-600" %}
+        {% set accept = "bg-lime-600 text-xl text-white" %}
+        {{ temp.popup(dialog, accept, "Status", message[1]) }}
+    {% elif message[0] == "loss" %}
+        {% set dialog = "border-red-600" %}
+        {% set reject = "bg-red-600 text-xl text-white" %}
+        {{ temp.popup(dialog, reject, "Status", message[1]) }}
+    {% endif %}
+{% endif %}

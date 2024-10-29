@@ -15,7 +15,7 @@ from werkzeug.serving import WSGIRequestHandler, is_running_from_reloader
 from webapp.config import FlaskManager, loading
 from webapp.handler.logger import set_file, set_logger, set_stream
 from webapp.handler.wordle import res2color, words_loader
-from webapp.page import api, normal, root
+from webapp.page import hard, normal, root
 
 if TYPE_CHECKING:
     from flask.blueprints import Blueprint
@@ -101,7 +101,7 @@ def create_app(debug: bool = False, prod: bool = False, **args: Any) -> Flask:
         atexit.register(_finalize, log, **args)
 
     # Loading blueprints
-    blueprints: list[Blueprint] = [api, root, normal]
+    blueprints: list[Blueprint] = [root, normal, hard]
 
     for blueprint in blueprints:
         app.register_blueprint(blueprint)

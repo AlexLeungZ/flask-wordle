@@ -58,6 +58,10 @@ def wordle(target: str, max_rounds: int = 6) -> None:
     print(f"Sorry, you've used all {max_rounds} rounds. The word was '{target}'.")
 
 
+def pattern_optimizer(key: str) -> tuple[int, int]:
+    return (key.count(Result.HIT), key.count(Result.PRES))
+
+
 def absurdle_checker(guess: str, words: set[str]) -> tuple[set[str], str]:
     # Group possible words by their result pattern
     patterns = defaultdict[str, set[str]](set[str])
@@ -66,7 +70,7 @@ def absurdle_checker(guess: str, words: set[str]) -> tuple[set[str], str]:
         patterns[pattern].add(word)
 
     # Choose the largest group to maximize the number of remaining possibilities
-    optimal = min(patterns, key=lambda key: (key.count(Result.HIT), key.count(Result.PRES)))
+    optimal = min(patterns, key=pattern_optimizer)
     return patterns[optimal], optimal
 
 
@@ -87,8 +91,8 @@ def absurdle(words: Iterable[str], max_rounds: int = 6) -> None:
 
 # Main entry point
 if __name__ == "__main__":
-    # file = Path("./words/default.txt")
-    file = Path("./words/cheat.txt")
+    file = Path("./words/default.txt")
+    # file = Path("./words/cheat.txt")
     if words := words_loader(file):
         # wordle(choice(words))
         absurdle(words, 10)

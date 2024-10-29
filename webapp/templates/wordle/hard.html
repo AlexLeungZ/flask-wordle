@@ -3,7 +3,7 @@
 {% extends "common.html" %}
 
 {% block _app_bar_title %}
-    <small>Normal Mode</small>
+    <small>Absurdle Mode</small>
 {% endblock _app_bar_title %}
 
 {# Page Body #}
@@ -17,7 +17,7 @@
                 </form>
             </div>
             <div class="container-fluid w-5/6">
-                {{ temp.hxBtn('query', 'previous', 'normal.form', 'load, click', 'Enter') }}
+                {{ temp.hxBtn('query', 'previous', 'hard.form', 'load, click', 'Enter') }}
                 {#  #}
             </div>
         </div>
@@ -25,11 +25,11 @@
 {% endblock _extend_body %}
 
 {# Nav View Menu Item Status #}
-{% block _temp_page_cur %}
+{% block _hard_page_cur %}
     {{- "active" -}}
-{% endblock _temp_page_cur %}
+{% endblock _hard_page_cur %}
 
 {# Nav View Menu Item URL #}
-{% block _temp_page_url %}
+{% block _hard_page_url %}
     {{- "#" -}}
-{% endblock _temp_page_url %}
+{% endblock _hard_page_url %}

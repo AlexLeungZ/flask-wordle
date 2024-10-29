@@ -52,24 +52,39 @@
                     <p class="item-header">Mode</p>
 
                     {%- set active -%}
-                        {% block _temp_page_cur %}
+                        {% block _normal_page_cur %}
                             {{- "" -}}
-                        {% endblock _temp_page_cur %}
+                        {% endblock _normal_page_cur %}
                     {%- endset -%}
 
                     {%- set href -%}
-                        {% block _temp_page_url %}
+                        {% block _normal_page_url %}
                             {{- url_for("normal.home") -}}
-                        {% endblock _temp_page_url %}
+                        {% endblock _normal_page_url %}
                     {%- endset -%}
 
-                    {# Page /page/page.html #}
-                    {{ render_row(active, href, "mif-cloud", "Normal") }}
+                    {# Page /wordle/normal.html #}
+                    {{ render_row(active, href, "mif-cloud", "Wordle") }}
+
+                    {%- set active -%}
+                        {% block _hard_page_cur %}
+                            {{- "" -}}
+                        {% endblock _hard_page_cur %}
+                    {%- endset -%}
+
+                    {%- set href -%}
+                        {% block _hard_page_url %}
+                            {{- url_for("hard.home") -}}
+                        {% endblock _hard_page_url %}
+                    {%- endset -%}
+
+                    {# Page /wordle/hard.html #}
+                    {{ render_row(active, href, "mif-cloud", "Absurdle") }}
 
                     {# Copyright #}
                     <li class="disabled py-4 !absolute bottom-0 left-0">
-                        {# {{ render_ext("Login as", user, role) }} #}
                         {{ render_ext("Copyright ©", jinja_site, jinja_year) }}
+                        {#  #}
                     </li>
                 </ul>
             </nav>
@@ -89,9 +104,9 @@
                         {# Addition Button #}
                         {% block _extend_btn %}
                         {% endblock _extend_btn %}
-                        {# Exit button #}
-                        {#  #}
-                        {#  #}
+                        {# Home button #}
+                        {% set href = url_for("root.main") %}
+                        {{ temp.appbarBtn("mif-home", theme, href) }}
                     </div>
                 </div>
                 {# Nav View Main Content #}

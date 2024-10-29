@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 from functools import cache
-from random import choice
 from typing import Self
 
 from flask import current_app as app
@@ -9,11 +8,11 @@ from flask.blueprints import Blueprint
 from flask.typing import ResponseReturnValue
 
 from webapp.config.manager import FlaskManager
-from webapp.handler.wordle import word_checker, wordle
+from webapp.handler.wordle import absurdle, word_checker
 from webapp.page._wordle import Message, list2key
 
 # No page should be rendered from this route
-bp = Blueprint("normal", __name__, url_prefix="/normal")
+bp = Blueprint("hard", __name__, url_prefix="/hard")
 
 
 @cache  # global
@@ -26,7 +25,7 @@ class Status:
 
     def reset(self: Self) -> None:
         with FlaskManager() as manager:
-            self.target = choice(manager.gvar.words)  # noqa: S311
+            self.target = set(manager.gvar.words)
         self.guess = ["0" * 5] * self.attempts
         self.result = ["~" * 5] * self.attempts
 
@@ -34,7 +33,7 @@ class Status:
 # Route for the normal mode
 @bp.route("/", methods=["GET"])
 def home() -> ResponseReturnValue:
-    return render_template("wordle/normal.html")
+    return render_template("wordle/hard.html")
 
 
 # Route for receiving player input and update the game status
@@ -50,14 +49,14 @@ def form() -> ResponseReturnValue:
     if attempt and (attempt := int(attempt)) < status.attempts:
         # If the input word is valid
         if value := word_checker(keyArr):
-            result = wordle(value, status.target)
+            status.target, optimal = absurdle(value, status.target)
             status.guess[attempt] = value
-            status.result[attempt] = result
+            status.result[attempt] = optimal
             attempt += 1
 
         # If player wins the game
-        if value == status.target:
-            message = Message.win.message(status.target)
+        if len(status.target) == 1 and value in status.target:
+            message = Message.win.message(status.target.pop())
             status.reset()
             attempt = None
 
@@ -72,7 +71,7 @@ def form() -> ResponseReturnValue:
         attempt = None
 
     # Logging the correct answer and guess history to the logger
-    app.logger.info(f"Current target: {status.target}")
+    app.logger.info(f"Current target: {status.target}"[:150])
     app.logger.info(f"Guess history: {status.guess}")
 
     return render_template(
