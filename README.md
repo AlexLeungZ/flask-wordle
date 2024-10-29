@@ -7,7 +7,8 @@ A wordle game with absurdle mode powered by flask.
 Make sure you have conda/mamba and node/nvm installed, and run:
 
 ```bash
-bash node.sh
+nvm install && nvm use
+npm install && npm run webpack
 mamba env create
 mamba activate wordle
 python webapp.py --path ./path/to/file.txt              # In production mode or 
