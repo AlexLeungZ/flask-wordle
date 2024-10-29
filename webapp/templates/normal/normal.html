@@ -1,0 +1,35 @@
+{% import "_template.html" as temp %}
+
+{% extends "common.html" %}
+
+{% block _app_bar_title %}
+    <small>Normal Mode</small>
+{% endblock _app_bar_title %}
+
+{# Page Body #}
+{% block _extend_body %}
+    <div class="w-screen h-screen fixed flex justify-center content-center z-0">
+        <div class="grid place-content-center w-6/12">
+            <div class="htmx-swap">
+                <form id="query">
+                    {#  #}
+                    {#  #}
+                </form>
+            </div>
+            <div class="container-fluid w-5/6">
+                {{ temp.hxBtn('query', 'previous', 'normal.form', 'load, click', 'Enter') }}
+                {#  #}
+            </div>
+        </div>
+    </div>
+{% endblock _extend_body %}
+
+{# Nav View Menu Item Status #}
+{% block _temp_page_cur %}
+    {{- "active" -}}
+{% endblock _temp_page_cur %}
+
+{# Nav View Menu Item URL #}
+{% block _temp_page_url %}
+    {{- "#" -}}
+{% endblock _temp_page_url %}

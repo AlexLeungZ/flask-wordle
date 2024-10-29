@@ -4,15 +4,18 @@ from contextlib import suppress
 from datetime import date
 from enum import StrEnum, unique
 from http import HTTPStatus
+from itertools import chain
 from logging import Logger
-from typing import TYPE_CHECKING, Any
+from pathlib import Path
+from typing import TYPE_CHECKING, Any, cast
 
 from flask import Flask, current_app
 from werkzeug.serving import WSGIRequestHandler, is_running_from_reloader
 
-from webapp.config import FlaskManager, filters, loading
+from webapp.config import FlaskManager, loading
 from webapp.handler.logger import set_file, set_logger, set_stream
-from webapp.page import api, root
+from webapp.handler.wordle import res2color, words_loader
+from webapp.page import api, normal, root
 
 if TYPE_CHECKING:
     from flask.blueprints import Blueprint
@@ -58,8 +61,9 @@ def _initialize(log: Logger, app: Flask) -> dict[str, Any]:
     args: dict[str, Any] = {}
 
     # Global Objects, cam be reassign and modify
-    with FlaskManager() as manager:  # noqa: F841
-        pass
+    with FlaskManager() as manager:
+        if filename := cast(str | None, app.config.get("PATH")):
+            manager.gvar.words = words_loader(Path(filename))
 
     if not app.debug:
         # Cron Jobs
@@ -74,19 +78,17 @@ def _finalize(log: Logger, **args: Any) -> None:  # noqa: ARG001
 
 
 # Webapp creation
-def create_app(debug: bool = False, prod: bool = False) -> Flask:
+def create_app(debug: bool = False, prod: bool = False, **args: Any) -> Flask:
     log = set_logger("handler", set_stream(), _file := set_file())
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_prefixed_env()
+    app.config.from_mapping(args)
     app.config.from_object(loading(debug))
     app.context_processor(inject_var)
 
     if endpoints := app.config.get("FILTER_ENDPT"):
         _hide_endpt_logs(endpoints)
 
-    # Apply logging settings
-    # if some_log := app.config.get("SOME_LOG"):
-    #     log.getChild("some").setLevel(some_log)
     app.logger.addHandler(_file)
 
     # Production settings
@@ -99,13 +101,14 @@ def create_app(debug: bool = False, prod: bool = False) -> Flask:
         atexit.register(_finalize, log, **args)
 
     # Loading blueprints
-    blueprints: list[Blueprint] = [api, root]
+    blueprints: list[Blueprint] = [api, root, normal]
 
     for blueprint in blueprints:
         app.register_blueprint(blueprint)
 
     # Jinja filtering template
     app.add_template_filter(zip, "zip")
-    app.add_template_filter(filters.float2dt, "timestamp")
+    app.add_template_filter(chain, "chain")
+    app.add_template_filter(res2color, "res2color")
 
     return app

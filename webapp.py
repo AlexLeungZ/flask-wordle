@@ -15,6 +15,9 @@ class Args(Namespace):
     host: str | None
     port: int | None
 
+    path: str
+    rounds: int
+
 
 def get_args() -> Args:
     flask = ["-f", "--flask"]
@@ -32,6 +35,9 @@ def get_args() -> Args:
     parser.add_argument(*host, dest="host", type=str, help="server host")
     parser.add_argument(*port, dest="port", type=int, help="server port")
 
+    parser.add_argument("--path", dest="path", type=str, required=True, help="wordle word list path")
+    parser.add_argument("--rounds", dest="rounds", type=int, required=True, help="max number of rounds")
+
     return parser.parse_args(namespace=Args())
 
 
@@ -47,15 +53,20 @@ def main() -> Flask | None:
     host = args.host or get_ip()
     port = args.port or 5000
 
+    extra = {
+        "PATH": args.path,
+        "ROUNDS": args.rounds,
+    }
+
     if args.test:
-        return create_app()
+        return create_app(**extra)
 
     elif args.flask or args.debug:
-        app = create_app(debug=args.debug)
+        app = create_app(debug=args.debug, **extra)
         app.run(host=host, port=port, threaded=True)
 
     else:
-        app = create_app(prod=True)
+        app = create_app(prod=True, **extra)
         serve(app, host=host, port=port)
 
 

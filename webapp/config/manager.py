@@ -1,11 +1,11 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from multiprocessing.managers import BaseManager
 
 
 @dataclass
 class _global:
     # Object can be reassigned here
-    pass
+    words: list[str] = field(default_factory=list)
 
 
 # Attributes as Global Variable
