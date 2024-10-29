@@ -12,7 +12,7 @@ npm install && npm run webpack
 mamba env create
 mamba activate wordle
 python webapp.py --path ./path/to/file.txt              # In production mode or 
-python webapp.py --flask --path ./words/default.txt     # In flask mode
+python webapp.py --debug --path ./words/default.txt     # In debug mode
 ```
 
 The application should be running at port 5000.
@@ -131,5 +131,5 @@ The log file is located at [handler.log]
 
 ### Remarks
 
-- Normally the answers are logged for debug propose (Under flask/debug mode)
+- Normally the answers are logged for debug propose (Under debug mode)
 - It is recommended to set a larger number for absurdle mode (host cheat)
